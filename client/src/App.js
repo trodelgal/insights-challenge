@@ -1,23 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState, useCallback } from "react";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import PostCard from "./components/PostCard";
 
 function App() {
+  const [posts, setPosts] = useState();
+  const [search, setSearch] = useState("");
+
+  const getPosts = useCallback(async () => {
+    const { data } = await axios.get(`/api/posts/${search}`);
+    setPosts(data);
+  }, [search]);
+
+  useEffect(() => {
+    getPosts();
+  }, [search]);
+
+  console.log(posts);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TextField
+        id="standard-basic"
+        label="Search"
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        style={{ margin: 10 }}
+        onClick={() => getPosts()}
+      >
+        find more posts
+      </Button>
+      <div style={{ margin: 10 , display: 'flex', flexDirection: 'column' , alignItems: 'center' }}>
+        {posts &&
+          posts.map((post, i) => {
+              return <PostCard key={i} post={post} />
+          })}
+      </div>
     </div>
   );
 }

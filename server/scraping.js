@@ -5,6 +5,7 @@ const Post = require("./models/posts");
 
 const scraping = async () => {
   try {
+    console.log("start");
     const browser = await puppeteer.launch({
       args: ["--proxy-server=socks5://127.0.0.1:9050"],
       // headless: false,
@@ -12,7 +13,6 @@ const scraping = async () => {
 
     const page = await browser.newPage();
     await page.goto("http://nzxj65x32vh2fkhk.onion/all");
-    // await page.goto("http://127.0.0.1:5500/index.html");
 
     // bring the titles
     const rowsTitles = await page.$$eval("h4", (element) =>
@@ -76,8 +76,10 @@ const scraping = async () => {
       });
     }
     browser.close();
+    return
   } catch (err) {
     console.log(err);
+    return
   }
 };
 
