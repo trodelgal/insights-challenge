@@ -7,8 +7,15 @@ const scraping = async () => {
   try {
     console.log("start");
     const browser = await puppeteer.launch({
-      args: ["--proxy-server=socks5://127.0.0.1:9050"],
-      // headless: false,
+      headless: true,
+      ignoreHTTPSErrors: true,
+      args: ['--disable-dev-shm-usage',
+        '--proxy-server=socks5://insights-challenge_proxy_1:9050',
+        // '--proxy-server=socks5://127.0.0.1:9050',
+        '--user-agent="Mozilla/5.0 (Windows NT 6.1; rv:60.7) Gecko/20100101 Firefox/60.7"',
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ]
     });
 
     const page = await browser.newPage();
@@ -49,20 +56,21 @@ const scraping = async () => {
       });
     }
 
-    let dataJson = await fs.readFile("./posts.json");
-    const existData = JSON.parse(dataJson);
+    const allPosts = await Post.find({})
+    // let dataJson = await fs.readFile("./posts.json");
+    // const existData = JSON.parse(dataJson);
     const newPosts = [];
 
     posts.forEach((post) => {
-      if (!existData.some((exist) => exist.title === post.title)) {
-        existData.push(post);
+      if (!allPosts.some((exist) => exist.title === post.title)) {
+        // existData.push(post);
         newPosts.push(post);
       }
     });
 
     console.log(newPosts);
-    await fs.writeFile("./posts.json", JSON.stringify(existData, null, 2));
-    if(newPosts[0]){
+    // await fs.writeFile("./posts.json", JSON.stringify(existData, null, 2));
+    if (newPosts[0]) {
       newPosts.forEach((val) => {
         const post = new Post(val);
         post
@@ -76,10 +84,10 @@ const scraping = async () => {
       });
     }
     browser.close();
-    return
+    return;
   } catch (err) {
     console.log(err);
-    return
+    return;
   }
 };
 

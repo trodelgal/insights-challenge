@@ -10,15 +10,19 @@ function App() {
   const [search, setSearch] = useState("");
 
   const getPosts = useCallback(async () => {
-    const { data } = await axios.get(`/api/posts/${search}`);
-    setPosts(data);
+    try{
+      const { data } = await axios.get(`/api/posts/${search}`);
+      // const firebase = await axios.get('https://insight-challenge.firebaseio.com/posts.json');
+      setPosts(data);
+    }catch(err) {
+      console.error(err)
+    }
   }, [search]);
 
   useEffect(() => {
     getPosts();
   }, [search]);
 
-  console.log(posts);
   return (
     <div className="App">
       <TextField

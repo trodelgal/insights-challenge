@@ -4,7 +4,7 @@ const {scraping} = require('./scraping')
 
 setInterval(()=>{
     scraping()
-},120000)
+},20000)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
