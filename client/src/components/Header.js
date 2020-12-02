@@ -15,8 +15,11 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import HomeIcon from "@material-ui/icons/Home";
+import ShowChartIcon from "@material-ui/icons/ShowChart";
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://127.0.0.1:8080";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,9 +82,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header({ debounce, getLabelPosts, getPosts }) {
+function Header({
+  debounce,
+  getLabelPosts,
+  getPosts,
+  setAnalytics,
+  analytics,
+}) {
   const classes = useStyles();
   const [sideBar, setSideBar] = React.useState({ left: false });
+  const [response, setResponse] = React.useState("");
+console.log(response);
+  React.useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("FromAPI", data => {
+      setResponse(data);
+    });
+    return () => socket.disconnect();
+  }, []);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -101,27 +119,35 @@ function Header({ debounce, getLabelPosts, getPosts }) {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <ListItem>
-          <ListItemIcon></ListItemIcon>
-          <ListItemText primary={"You Can Find"} />
+        <ListItem button onClick={() => setAnalytics(false)}>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Home"} />
         </ListItem>
-        {["weapons", "money", "url", "porn", "internet"].map((label, i) => {
-          return (
-            <ListItem key={i} button onClick = {()=>getLabelPosts(label)}>
-              <ListItemIcon></ListItemIcon>
-              <ListItemText secondary={label} />
-            </ListItem>
-          );
-        })}
-        <ListItem button onClick={getPosts}>
-          <ListItemIcon></ListItemIcon>
-          <ListItemText secondary={"All Posts"} />
-        </ListItem>
+        <Divider />
+        {!analytics &&
+          ["weapons", "money", "url", "porn", "internet"].map((label, i) => {
+            return (
+              <ListItem key={i} button onClick={() => getLabelPosts(label)}>
+                <ListItemIcon></ListItemIcon>
+                <ListItemText secondary={label} />
+              </ListItem>
+            );
+          })}
+        {!analytics && (
+          <ListItem button onClick={getPosts}>
+            <ListItemIcon></ListItemIcon>
+            <ListItemText secondary={"All Posts"} />
+          </ListItem>
+        )}
       </List>
       <Divider />
       <List>
-        <ListItem button>
-          <ListItemIcon></ListItemIcon>
+        <ListItem button onClick={() => setAnalytics(true)}>
+          <ListItemIcon>
+            <ShowChartIcon />
+          </ListItemIcon>
           <ListItemText primary={"Analitics"} />
         </ListItem>
       </List>
@@ -141,8 +167,9 @@ function Header({ debounce, getLabelPosts, getPosts }) {
           >
             <MenuIcon />
           </IconButton>
+            <NotificationsIcon/>
           <Typography className={classes.title} variant="h6" noWrap>
-            What Can You Find In Dark Net Blog
+            What Can You Find In The Dark Net
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

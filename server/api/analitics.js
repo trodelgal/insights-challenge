@@ -37,7 +37,8 @@ router.get("/time", async (req, res) => {
           counter = counter + 1;
         }
       });
-      result.push({ hour: i, count: counter });
+      const time = i<10? `0${i}:00`:`${i}:00`
+      result.push({ hour:time , posts: counter });
     }
     res.json(result);
   } catch (err) {

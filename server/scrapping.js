@@ -59,6 +59,7 @@ const scrapping = async () => {
         views: views[i].split(":")[2],
       });
     }
+    browser.close();
 
     const allPosts = await Post.find({})
     let dataJson = await fs.readFile("./posts.json");
@@ -95,12 +96,12 @@ const scrapping = async () => {
             console.log(err);
           });
       });
+      return newPosts;
     }
-    browser.close();
-    return;
+    return ;
   } catch (err) {
     console.log(err);
-    return;
+    return err.message;
   }
 };
 

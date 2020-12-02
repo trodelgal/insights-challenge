@@ -1,13 +1,15 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, lazy, Suspense } from "react";
 import axios from "axios";
 import PostCard from "./PostCard";
 import _ from "lodash";
 import Header from "./Header";
 import CircularProgress from "@material-ui/core/CircularProgress";
+const Analitics = lazy(() => import("./Analitics"));
 
 function Main() {
   const [posts, setPosts] = useState();
   const [search, setSearch] = useState("");
+  const [analytics, setAnalytics] = useState(false);
 
   // get all the posts and search in them
   const getPosts = useCallback(async () => {
@@ -28,14 +30,14 @@ function Main() {
     []
   );
 
-  const getLabelPosts = useCallback(async(label) => {
-    try{
+  const getLabelPosts = useCallback(async (label) => {
+    try {
       const { data } = await axios.get(`/api/labels/${label}`);
       setPosts(data);
-    }catch(err){
-      console.error(err)
+    } catch (err) {
+      console.error(err);
     }
-  },[])
+  }, []);
 
   useEffect(() => {
     getPosts();
@@ -43,23 +45,35 @@ function Main() {
 
   return (
     <div>
-      <Header debounce={debounce} getLabelPosts={getLabelPosts} getPosts={getPosts} />
-      <div
-        style={{
-          margin: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {posts ? (
-          posts.map((post, i) => {
-            return <PostCard key={i} post={post} />;
-          })
-        ) : (
-          <CircularProgress />
-        )}
-      </div>
+      <Header
+        debounce={debounce}
+        getLabelPosts={getLabelPosts}
+        getPosts={getPosts}
+        setAnalytics={setAnalytics}
+        analytics={analytics}
+      />
+      {analytics ? (
+        <Suspense fallback={<CircularProgress />}>
+          <Analitics />
+        </Suspense>
+      ) : (
+        <div
+          style={{
+            margin: 10,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {posts ? (
+            posts.map((post, i) => {
+              return <PostCard key={i} post={post} />;
+            })
+          ) : (
+            <CircularProgress />
+          )}
+        </div>
+      )}
     </div>
   );
 }
