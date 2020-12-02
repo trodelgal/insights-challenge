@@ -35,14 +35,14 @@ const PostCard = React.memo(({ post }) => {
           {post.content.trim()}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {`${post.author} ${new Date(post.date).toDateString().slice(0, 19)}`}
+          {`${post.author} | ${new Date(post.date).toDateString()}`}
         </Typography>
         
         <Typography className={classes.pos} style={{display:"flex"}}>
           {
             post.labels.map((label,i)=>{
               if(label !== post.labels[i-1]){
-                return <div className="label">{label}</div>
+                return <div key={i} className="label">{label}</div>
               }
             })
           }

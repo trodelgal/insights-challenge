@@ -5,7 +5,7 @@ const Post = require("./models/posts");
 
 const scrapping = async () => {
   try {
-    const labels =[{key:"weapons", dict:["weapons","Weapon", "guns"]}, {key:"porn", dict:["fuck", "porn", "porno"]},{key:"money", dict:["bitcoins","bitcoin","buy", "invest", "money", "credit card"]},{key:"url", dict:["http"]}, {key:"internet", dict:["instegram", "facebook","hack"]}];
+    const labels =[{key:"weapons", dict:["weapons","Weapon", "guns"]}, {key:"porn", dict:["fuck", "porn", "porno"]},{key:"money", dict:["bitcoins","bitcoin","buy", "invest", "money", "credit card"]},{key:"url", dict:["http"]}, {key:"internet", dict:["instegram", "facebook","hack", "google"]}];
     console.log("start scrapping");
     // open puppeteer browser
     const browser = await puppeteer.launch({
