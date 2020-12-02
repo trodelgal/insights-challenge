@@ -32,16 +32,22 @@ const PostCard = React.memo(({ post }) => {
           {post.title}
         </Typography>
         <Typography variant="body2" component="div">
-          {post.content.map((item, i) => {
-            const regex = /[a-zA-Z1-9]/;
-            if (item.search(regex) !== -1) {
-              return <div key={i}>{item.trim()}</div>;
-            }
-          })}
+          {post.content.trim()}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {`${post.author} ${post.date.slice(0, 19)}`}
+          {`${post.author} ${new Date(post.date).toDateString().slice(0, 19)}`}
         </Typography>
+        
+        <Typography className={classes.pos} style={{display:"flex"}}>
+          {
+            post.labels.map((label,i)=>{
+              if(label !== post.labels[i-1]){
+                return <div className="label">{label}</div>
+              }
+            })
+          }
+        </Typography>
+
       </CardContent>
     </Card>
   );

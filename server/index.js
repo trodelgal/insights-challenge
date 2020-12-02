@@ -1,10 +1,10 @@
 require('dotenv').config();
 const app = require('./app');
-const {scraping} = require('./scraping')
+const {scrapping} = require('./scrapping')
 
 setInterval(()=>{
-    scraping()
-},20000)
+  scrapping()
+},120000)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

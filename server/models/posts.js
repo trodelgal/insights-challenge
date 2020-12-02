@@ -15,10 +15,11 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const postSchema = new mongoose.Schema({
   title: {type:String, required: true},
-  content: {type:Array},
+  content: {type:String},
   author: {type:String},
-  date: {type:String},
+  date: {type:Number},
   views: {type:String},
+  labels:{type:Array},
 })
 
 postSchema.set('toJSON', {

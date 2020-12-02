@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import PostCard from "./components/PostCard";
+import pic from './pictures/darknet.jpeg';
 
 function App() {
   const [posts, setPosts] = useState();
@@ -13,6 +14,7 @@ function App() {
     try{
       const { data } = await axios.get(`/api/posts/${search}`);
       // const firebase = await axios.get('https://insight-challenge.firebaseio.com/posts.json');
+      console.log(data);
       setPosts(data);
     }catch(err) {
       console.error(err)
@@ -24,7 +26,7 @@ function App() {
   }, [search]);
 
   return (
-    <div className="App">
+    <div className="App" style={{background:pic}}>
       <TextField
         id="standard-basic"
         label="Search"

@@ -13,19 +13,13 @@ services:
     depends_on:
       - express-server
 
-  # tor-privoxy:
-  #   restart: always
-  #   image: dockage/tor-privoxy:latest
-  #   ports:
-  #     - "9050:9050" # Tor proxy
-  #     - "9051:9051" # Tor control port
-  #     - "8118:8118" # Privoxy
   proxy:
     image: dperson/torproxy
-    # ports:
-    #   - "8118:8118" # dperson/torproxy
-    #   - "9050:9050" # Tor proxy
-      # - "9051:9051" # Tor control port
+  
+  # elasticsearch:
+  #   image: elasticsearch
+  #   ports: 
+  #     - "9200:9200"
 
   express-server:
     build: 
