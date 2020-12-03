@@ -2,20 +2,21 @@ require("dotenv").config();
 const puppeteer = require("puppeteer");
 const fs = require("fs").promises;
 const Post = require("./models/posts");
+const proxi = process.env.HOST || '127.0.0.1'
 
 const scrapping = async () => {
   try {
     const labels =[{key:"weapons", dict:["weapons","Weapon", "guns"]}, {key:"porn", dict:["fuck", "porn", "porno"]},{key:"money", dict:["bitcoins","bitcoin","buy", "invest", "money", "credit card"]},{key:"url", dict:["http"]}, {key:"internet", dict:["instegram", "facebook","hack", "google"]}];
-    console.log("start scrapping");
+    console.log("start scraper");
     // open puppeteer browser
     const browser = await puppeteer.launch({
       headless: true,
       ignoreHTTPSErrors: true,
       args: [
-        '--disable-dev-shm-usage',
-        // '--proxy-server=socks5://insights-challenge_proxy_1:9050',
+        // '--disable-dev-shm-usage',
         '--proxy-server=socks5://127.0.0.1:9050',
-        '--user-agent="Mozilla/5.0 (Windows NT 6.1; rv:60.7) Gecko/20100101 Firefox/60.7"',
+        // '--proxy-server=socks5://proxy:9050',
+        // '--user-agent="Mozilla/5.0 (Windows NT 6.1; rv:60.7) Gecko/20100101 Firefox/60.7"',
         '--no-sandbox',
         '--disable-setuid-sandbox'
       ]

@@ -18,7 +18,8 @@
 
 .App {
   text-align: center;
-  background-image:url('./pictures/darknet.jpeg')
+  background-image:url('./pictures/darknet.jpeg');
+  min-height: 800px;
 }
 
 .App-logo {

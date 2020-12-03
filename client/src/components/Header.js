@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// header component 
+// header component
 function Header({
   debounce,
   getLabelPosts,
@@ -128,13 +128,13 @@ function Header({
 
   // show notification
   const handleClick = () => {
-    if(iconColor === '')return;
+    if (iconColor === "") return;
     setOpen(true);
   };
 
   // close notification
   const handleClose = (event, reason) => {
-    setIconColor('')
+    setIconColor("");
     if (reason === "clickaway") {
       return;
     }
@@ -200,7 +200,7 @@ function Header({
           >
             <MenuIcon />
           </IconButton>
-          <NotificationsIcon color={iconColor} onClick={handleClick} />
+            <NotificationsIcon  color={iconColor} onClick={handleClick}/>
           <Typography className={classes.title} variant="h6" noWrap>
             What Can You Find In The Dark Net
           </Typography>

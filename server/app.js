@@ -1,13 +1,9 @@
 const express = require("express");
 const app = express();
 const { scrapping } = require("./scrapping");
-// const {getAllElastic} = require('./elasticsearch');
 const mongoose = require("mongoose");
-const Notification = require("./models/notification");
-const cors = require("cors");
-app.use(express.json());
 
-app.use(cors());
+app.use(express.json());
 
 // connect to mondoDB
 const url = process.env.MONGODB_URI;
@@ -49,37 +45,5 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-setInterval(async () => {
-  const posts = await scrapping();
-  if (typeof posts === "object") {
-    const notification = new Notification({
-      message: "New posts have been posted",
-      post: posts,
-      date: Date.now(),
-    });
-    notification
-      .save()
-      .then((savedNotification) => {
-        console.log(savedNotification);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else if (typeof posts === "string") {
-    const notification = new Notification({
-      message:`SCRAPER ERROR: ${posts}`,
-      post: [],
-      date: Date.now(),
-    });
-    notification
-      .save()
-      .then((savedNotification) => {
-        console.log(savedNotification);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}, 120000);
 
 module.exports = app;
