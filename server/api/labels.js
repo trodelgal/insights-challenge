@@ -6,7 +6,6 @@ const router = Router();
 router.get('/:label', async (req,res) =>{
     try{
       const label = req.params.label
-      console.log(label);
         const postsByLabels = await Post.find({
           labels: { "$in" : [label]} 
         }).sort({ date: -1})

@@ -1,6 +1,6 @@
 export const changeSearch = (text) => {
     return {
-        type:'CHANGE_SEARCH',
+        type:'NOTIFICATION',
         payload: text
     }
 }

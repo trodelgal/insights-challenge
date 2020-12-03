@@ -17,10 +17,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import ShowChartIcon from "@material-ui/icons/ShowChart";
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://127.0.0.1:8080";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import Snackbar from "@material-ui/core/Snackbar";
+import CloseIcon from "@material-ui/icons/Close";
+import axios from "axios";
 
+// navbar style
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -82,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// header component 
 function Header({
   debounce,
   getLabelPosts,
@@ -91,16 +94,28 @@ function Header({
 }) {
   const classes = useStyles();
   const [sideBar, setSideBar] = React.useState({ left: false });
-  const [response, setResponse] = React.useState("");
-console.log(response);
-  React.useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("FromAPI", data => {
-      setResponse(data);
-    });
-    return () => socket.disconnect();
-  }, []);
+  const [notification, setNotification] = React.useState([
+    { date: Date.now() },
+  ]);
+  const [iconColor, setIconColor] = React.useState("");
+  const [open, setOpen] = React.useState(false);
 
+  // check scraper notification
+  React.useEffect(() => {
+    const interval = setInterval(async () => {
+      const { data } = await axios.get("/api/notifications/last");
+      console.log("data", data);
+      console.log("notification", notification);
+      if (data[0].date > notification[notification.length - 1].date) {
+        setNotification([...notification, data[0]]);
+        setIconColor("error");
+        alert("new notification");
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [notification]);
+
+  // open side bar
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -111,6 +126,23 @@ console.log(response);
     setSideBar({ left: open });
   };
 
+  // show notification
+  const handleClick = () => {
+    if(iconColor === '')return;
+    setOpen(true);
+  };
+
+  // close notification
+  const handleClose = (event, reason) => {
+    setIconColor('')
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  // side bar
   const list = () => (
     <div
       className={clsx(classes.list, {})}
@@ -154,6 +186,7 @@ console.log(response);
     </div>
   );
 
+  // my header
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -167,7 +200,7 @@ console.log(response);
           >
             <MenuIcon />
           </IconButton>
-            <NotificationsIcon/>
+          <NotificationsIcon color={iconColor} onClick={handleClick} />
           <Typography className={classes.title} variant="h6" noWrap>
             What Can You Find In The Dark Net
           </Typography>
@@ -192,6 +225,31 @@ console.log(response);
           {list()}
         </Drawer>
       )}
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={notification[notification.length - 1].message}
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+              UNDO
+            </Button>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
     </div>
   );
 }
