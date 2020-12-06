@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const { scrapping } = require("./scrapping");
 const mongoose = require("mongoose");
 
 app.use(express.json());

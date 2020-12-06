@@ -1,11 +1,12 @@
 require("dotenv").config();
 const app = require("./app");
-const { scrapping } = require("./scrapping");
+const { scraper } = require("./scraper");
 const Notification = require("./models/notification");
 
 // scrap the website
 setInterval(async () => {
-  const posts = await scrapping();
+  const posts = await scraper();
+  console.log(posts)
   if (typeof posts === "object") {
     const notification = new Notification({
       message: "New posts have been posted",
@@ -35,7 +36,7 @@ setInterval(async () => {
         console.log(err);
       });
   }
-}, 120000);
+}, 300000);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

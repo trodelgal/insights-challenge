@@ -111,7 +111,7 @@ function Header({
         setIconColor("error");
         alert("new notification");
       }
-    }, 10000);
+    }, 60000);
     return () => clearInterval(interval);
   }, [notification]);
 
@@ -180,7 +180,7 @@ function Header({
           <ListItemIcon>
             <ShowChartIcon />
           </ListItemIcon>
-          <ListItemText primary={"Analitics"} />
+          <ListItemText primary={"Analytics"} />
         </ListItem>
       </List>
     </div>
