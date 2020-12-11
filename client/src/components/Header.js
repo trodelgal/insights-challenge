@@ -109,7 +109,7 @@ function Header({
       if (data[0].date > notification[notification.length - 1].date) {
         setNotification([...notification, data[0]]);
         setIconColor("error");
-        alert("new notification");
+        alert(data.message);
       }
     }, 60000);
     return () => clearInterval(interval);

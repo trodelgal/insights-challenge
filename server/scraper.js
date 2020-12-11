@@ -22,8 +22,8 @@ const scraper = async () => {
       ignoreHTTPSErrors: true,
       args: [
         "--disable-dev-shm-usage",
-        "--proxy-server=socks5://127.0.0.1:9050",
-        // '--proxy-server=socks5://proxy:9050',
+        // "--proxy-server=socks5://127.0.0.1:9050",
+        '--proxy-server=socks5://proxy:9050',
         '--user-agent="Mozilla/5.0 (Windows NT 6.1; rv:60.7) Gecko/20100101 Firefox/60.7"',
         "--no-sandbox",
         "--disable-setuid-sandbox",

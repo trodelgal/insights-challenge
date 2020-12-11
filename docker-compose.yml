@@ -34,6 +34,8 @@ services:
     volumes:
       - '/usr/app/server/node_modules'
       - ./server:/usr/app/server"
+    depends_on:
+      - proxy
     environment:
       - "TZ=Israel" 
 
